@@ -1,4 +1,6 @@
 #date{
-    border-color: lightgray;
-    box-shadow: none;
+    border: 1px solid lightgray;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    text-align: center;
 }
