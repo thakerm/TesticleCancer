@@ -4,3 +4,11 @@
     border-bottom-right-radius: 2px;
     text-align: center;
 }
+#header{
+    text-align: center;
+}
+#cell2{
+    border-color: none;
+    border-right: none;
+    border-style:  none;
+}
