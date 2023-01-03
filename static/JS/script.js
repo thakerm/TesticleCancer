@@ -85,7 +85,7 @@ function filter(path, stage, date) {
     var stage_header = document.querySelector(stage);
     output = stage_header.options[stage_header.selectedIndex].textContent;
     document.getElementById("stage_header").innerHTML = output;
-  
+    //const img = document.createElement("img");
   var path_value = document.querySelector(path).value;
   generateTable(); //initialize table.
 
@@ -94,27 +94,29 @@ function filter(path, stage, date) {
    
     if(stage_value==0)
     {
-        generate(GCT_stage_1_0=[
+        //img.src="images/GCT_1_0.png";
+        //$("#image").append(img);
+        generate(GCT_1_0=[
             "H&P/Labs",3,6,[6,12],12,12,
             "CT",
             6,6,[6,12],[12,24],[12,24],
             "CXR",1,1,1,1,1],date_value);
     }
     else if(stage_value==1)
-        generate(GCT_stage_1_1 = [
+        generate(GCT_1_1 = [
             "H&P/Labs",6,6,12,12,12,
             "CT",12,12,12,1,1,
             "CXR",1,1,1,1,1],date_value);
     
     else if (stage_value==2)
     {
-        generate(GCT_stage_1_2 = [
+        generate(GCT_1_2 = [
             "H&P/Labs",3,6,6,6,6,
             "CT",3,12,12,1,1,
             "CXR",6,6,1,1,1] ,date_value);
     }
     else{
-        generate(GCT_stage_1_3 = [
+        generate(GCT_1_3 = [
             "H&P/Labs",2,3,6,6,12,
             "CT",4,6,12,12,1,
             "CXR",2,3,12,12,12] ,date_value);
@@ -123,35 +125,35 @@ function filter(path, stage, date) {
   }
   else
   {
-    if(stage_value==0)
+    if(stage_value==1)
     {
-        generate(NSGCT_stage_1_0=[
+        generate(NSGCT_1_0=[
             "H&P/Labs",2,3,[4,6],6,12,
             "CT",
             [4,6],6,12,1,1,
             "CXR",[4,12],12,12,12,1],date_value);
     }
     else if(stage_value==1)
-        generate(GCT_stage_1_1 = [
+        generate(NSGCT_1_1 = [
             "H&P/Labs",2,3,[4,6],6,12,
             "CT",4,[4,6],6,12,1,
             "CXR",4,[4,6],6,12,1],date_value);
     
     else if (stage_value==2)
     {
-        generate(GCT_stage_1_2 = [
+        generate(NSGCT_1_2 = [
             "H&P/Labs",3,3,6,6,12,
             "CT",12,12,1,1,1,
             "CXR",[6,12],12,1,1,1] ,date_value);
     }
     else if(stage_value==3){
-        generate(GCT_stage_1_3 = [
+        generate(NSGCT_1_3 = [
             "H&P/Labs",2,3,6,6,6,
             "CT",6,[6,12],12,1,1,
             "CXR",6,6,12,12,1] ,date_value);
     }
     else if(stage_value==4){
-        generate(GCT_stage_1_4 = [
+        generate(NSGCT_1_4 = [
             "H&P/Labs",6,6,12,12,12,
             "CT",4,12,1,1,1,
             "CXR",6,12,12,12,12] ,date_value);
@@ -276,4 +278,5 @@ function generate(stage_data, date) {
 
   (parsedTable).append(tableBody);
   resultBody.append(parsedTable);
+  
 }
