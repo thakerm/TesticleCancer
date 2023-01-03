@@ -3,12 +3,11 @@ var debug = true;
 var LOG = debug ? console.log.bind(console) : function () {}; // will turn off all console.log statements.
 
 //Global  Variables
-
-var data_for_processing;
 var parsedTable;
 
 //initializes Stagging selection
 $(function () {
+    
   document.querySelector("#date").value = process_date(new Date());
   var path = document.querySelector("#path");
   updateForm(path);
@@ -76,37 +75,92 @@ function updateForm(path) {
 
 //function will help process GCT vs NSGCT
 function filter(path, stage, date) {
-  document.querySelector(date).stepUp(1); //must do this to get correct date
+    document.getElementById("results").textContent = " ";
+
+    document.querySelector(date).stepUp(1); //must do this to get correct date
     var date_value = document.querySelector(date).value;
-  document.querySelector(date).stepDown(1);
+    document.querySelector(date).stepDown(1);
     stage_value = document.querySelector(stage).value;
+    LOG("Stage Value",stage_value)
     var stage_header = document.querySelector(stage);
     output = stage_header.options[stage_header.selectedIndex].textContent;
-  document.getElementById("stage_header").innerHTML=output;
+    document.getElementById("stage_header").innerHTML = output;
   
   var path_value = document.querySelector(path).value;
   generateTable(); //initialize table.
 
-  if (path_value == 0) { //GCT
-    if (stage_value == 0) {
-      generate(
-        (GCT_stage_1_0= [
-        "H&P/Labs",12,[6,12],12,12,12,
-        "CT",6,6,12,12,24,
-        "CXR",1,1,1,1,1]),
-        date_value
-      );
-     
+  if (path_value == 0) 
+  { //GCT
+   
+    if(stage_value==0)
+    {
+        generate(GCT_stage_1_0=[
+            "H&P/Labs",3,6,[6,12],12,12,
+            "CT",
+            6,6,[6,12],[12,24],[12,24],
+            "CXR",1,1,1,1,1],date_value);
     }
     else if(stage_value==1)
-    {
-        generate(
-            (GCT_stage_1_1 = [
+        generate(GCT_stage_1_1 = [
             "H&P/Labs",6,6,12,12,12,
             "CT",12,12,12,1,1,
-            "CXR",1,1,1,1,1]),
-            date_value
-          );
+            "CXR",1,1,1,1,1],date_value);
+    
+    else if (stage_value==2)
+    {
+        generate(GCT_stage_1_2 = [
+            "H&P/Labs",3,6,6,6,6,
+            "CT",3,12,12,1,1,
+            "CXR",6,6,1,1,1] ,date_value);
+    }
+    else{
+        generate(GCT_stage_1_3 = [
+            "H&P/Labs",2,3,6,6,12,
+            "CT",4,6,12,12,1,
+            "CXR",2,3,12,12,12] ,date_value);
+    }
+   
+  }
+  else
+  {
+    if(stage_value==0)
+    {
+        generate(NSGCT_stage_1_0=[
+            "H&P/Labs",2,3,[4,6],6,12,
+            "CT",
+            [4,6],6,12,1,1,
+            "CXR",[4,12],12,12,12,1],date_value);
+    }
+    else if(stage_value==1)
+        generate(GCT_stage_1_1 = [
+            "H&P/Labs",2,3,[4,6],6,12,
+            "CT",4,[4,6],6,12,1,
+            "CXR",4,[4,6],6,12,1],date_value);
+    
+    else if (stage_value==2)
+    {
+        generate(GCT_stage_1_2 = [
+            "H&P/Labs",3,3,6,6,12,
+            "CT",12,12,1,1,1,
+            "CXR",[6,12],12,1,1,1] ,date_value);
+    }
+    else if(stage_value==3){
+        generate(GCT_stage_1_3 = [
+            "H&P/Labs",2,3,6,6,6,
+            "CT",6,[6,12],12,1,1,
+            "CXR",6,6,12,12,1] ,date_value);
+    }
+    else if(stage_value==4){
+        generate(GCT_stage_1_4 = [
+            "H&P/Labs",6,6,12,12,12,
+            "CT",4,12,1,1,1,
+            "CXR",6,12,12,12,12] ,date_value);
+    }
+    else {
+        generate(GCT_stage_1_5 = [
+            "H&P/Labs",2,3,4,6,12,
+            "CT",4,12,1,1,1,
+            "CXR",[2,4],[3,6],12,12,12] ,date_value);
     }
   }
 }
@@ -145,7 +199,7 @@ function generate(stage_data, date) {
   var date_array;
   resultBody = $("#results");
   count = 0;
-
+  var cell;
   body = "";
 
     for (
@@ -153,90 +207,73 @@ function generate(stage_data, date) {
         i < stage_data.length; //12
         i++ //run through columns year 1-5)
     ) {
-        x=stage_data[i].length;
+        x=stage_data[i].length; //check if the data array contains more than 1 
         if (i == 0 || i==6 ||i==12) { //row headers
             var dt_working = new Date(date);
-            body += "<tr><td><b>" + stage_data[i] + "</b></td>";
+            row = tableBody.insertRow(-1);
+            cell=row.insertCell(-1);
+            cell.id = `input_${i}`;
+            
+            cell.innerHTML="<b>"+stage_data[i]+"</b>";
             continue;
         }
         
-        if(stage_data[i]==1)
-        {
-                //LOG("Stage Date CXR: ",stage_data[i])
-                body+="<td>"
-                body += "Not Clinically Relevant";
+        if(stage_data[i]==1){
+                cell=row.insertCell(-1);
+                cell.id=`input_${i}`;
+                cell.innerHTML="As Clinically Indicated";
                 continue;
         }
-        else if(x>1) //trying to generate multiple dates 
-        {
-        
+        else if(x>1){//trying to generate multiple dates
+            LOG("Multiple Dates");
             for (j = 0; j < x; j++) 
             {
-                if(j==0)
-                {
-                   body += "<td><b> "+stage_data[i][j]+" month intervals:</b> <br>";
-                   LOG("Stage_data[i][j]", stage_data[i][j]);
+                y = 12 / stage_data[i][j];
+                if(j==0){
+                   cell = row.insertCell(-1);
+                   cell.innerHTML="<b>"+stage_data[i][j]+" month intervals:</b> <br>";
+          
+                }
+                else if (j>=1){
+                   cell.innerHTML+="<b>"+stage_data[i][j]+" month intervals:</b> <br>";
+                   var reset_date = document.querySelector(`#input_${i-1}_1`).innerHTML;
+                   dt_working = new Date(reset_date);
+                }
                    
-                }
-                else
-                {
-                body += "<b> "+stage_data[i][j]+" month intervals:</b> <br>";
-                //dt_working = dt;
-                }
-                   y = 12 / stage_data[i][j];
-            
-                   LOG(" Year  ",i," ",stage_data[i][j]," month interval. Total number of dates generated: ",y);
-            
                    for (m = 0; m < y; m++) {
-                    
-                     
+              
                      dt_working.setMonth(dt_working.getMonth() + stage_data[i][j]);
-                     body += dt_working.toLocaleDateString('en-US') + "<br>";
-                    
-                     LOG("Active Date", m, " ", dt_working);
-                     LOG("Stored Date", m, " ", dt);
+                     LOG("dt_working_multi_element ",m," ",dt_working)
+                     cell.innerHTML+="<span id="+`input_${i}_${count}`+">"+dt_working.toLocaleDateString('en-US') + "</span><br>";
+                     //$(parsedTable).append(tableBody);
+                     resultBody.append(parsedTable);
+                     count++;
                    }
-            
-                    //dt_working = dt;
-                    LOG("DT WORKING = DT: ",dt_working)
+    
             }
-            
-            
+            count=0;       
         }
         else{
-            body += "<td><b> "+stage_data[i]+" month intervals:</b> <br>";
+            cell=row.insertCell(-1);
+            cell.innerHTML="<b>"+stage_data[i]+" month intervals:</b> <br>";
             y = 12 / stage_data[i];
             for (m = 0; m < y; m++) 
             {
+               
                 dt_working.setMonth(dt_working.getMonth() + stage_data[i]);
-                body += dt_working.toLocaleDateString('en-US')+ "<br>";
-                LOG("Date working", dt_working);
+                LOG("dt_working_single_element ",dt_working)
+                cell.innerHTML+="<span id="+`input_${i}_${count}`+">"+dt_working.toLocaleDateString('en-US') + "</span><br>";
+                count++;
            
             }
             
+            count=0;
         }
- 
-       
-        body += "</td>";
-        count++;
+        
+   
+        
     }
 
-  $(tableBody).append(body);
-  $(parsedTable).append(tableBody);
+  (parsedTable).append(tableBody);
   resultBody.append(parsedTable);
 }
-
-
-
-
-
- /*  LOG(
-            type,
-            " Year ",
-            i + 1,
-            " ",
-            stage_data[i],
-            " month interval. Total number of dates generated: ",
-            y
-        ); */
-        //LOG("Stage Date CXR: ",stage_data[i])
