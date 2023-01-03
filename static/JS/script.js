@@ -60,7 +60,7 @@ function updateForm(path) {
       "Clinical Stage I without Risk Factors, NSGCT: Active Surveillance",
       "Clinical Stage I with Risk Factors,a NSGCT: Active Surveillance",
       "Clinical Stage IA/B NSGCT: Treated with 1 Cycle of Adjuvant BEP Chemotherapy or Primary RPLND",
-      "Clincal Stage II/III NSGCT: Surveillance After Complete Response to Chemotherapy ± Postchemotherapy RPLND",
+      "Clincal Stage II/III NSGCT: Surveillance After Complete Response to Chemotherapy ± Post Chemotherapy RPLND",
       "Pathologic Stage IIA/B NSGCT: Post-Primary RPLND and Treated with Adjuvant Chemotherapy",
       "Pathologic Stage IIA/B NSGCT: Post-Primary RPLND and NOT Treated with Adjuvant Chemotherapy",
     ];
