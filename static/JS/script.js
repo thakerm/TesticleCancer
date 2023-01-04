@@ -11,6 +11,7 @@ $(function () {
   document.querySelector("#date").value = process_date(new Date());
   var path = document.querySelector("#path");
   updateForm(path);
+
 });
 
 //converts selected date into format we can edit
@@ -81,13 +82,12 @@ function filter(path, stage, date) {
     var date_value = document.querySelector(date).value;
     document.querySelector(date).stepDown(1);
     stage_value = document.querySelector(stage).value;
-    LOG("Stage Value",stage_value)
     var stage_header = document.querySelector(stage);
     output = stage_header.options[stage_header.selectedIndex].textContent;
     document.getElementById("stage_header").innerHTML = output;
     //const img = document.createElement("img");
-  var path_value = document.querySelector(path).value;
-  generateTable(); //initialize table.
+    var path_value = document.querySelector(path).value;
+    generateTable(); //initialize table.
 
   if (path_value == 0) 
   { //GCT
@@ -159,13 +159,13 @@ function filter(path, stage, date) {
             "CXR",6,12,12,12,12] ,date_value);
     }
     else {
-        generate(GCT_stage_1_5 = [
+        generate(NSGCT_1_5 = [
             "H&P/Labs",2,3,4,6,12,
             "CT",4,12,1,1,1,
             "CXR",[2,4],[3,6],12,12,12] ,date_value);
     }
   }
-}
+} 
 
 function generateTable() {
   //generates table
@@ -196,19 +196,14 @@ function generateTable() {
 }
 
 function generate(stage_data, date) {
-  var dt=new Date(date);
+  const dt=new Date(date);
   var dt_working = new Date(date);
-  var date_array;
   resultBody = $("#results");
   count = 0;
   var cell;
-  body = "";
 
-    for (
-        i = 0;
-        i < stage_data.length; //12
-        i++ //run through columns year 1-5)
-    ) {
+    for (i = 0;i < stage_data.length;i++)
+     {
         x=stage_data[i].length; //check if the data array contains more than 1 
         if (i == 0 || i==6 ||i==12) { //row headers
             var dt_working = new Date(date);
@@ -226,28 +221,36 @@ function generate(stage_data, date) {
                 cell.innerHTML="As Clinically Indicated";
                 continue;
         }
-        else if(x>1){//trying to generate multiple dates
+        else if(x>1){ //trying to generate multiple dates
             LOG("Multiple Dates");
             for (j = 0; j < x; j++) 
             {
                 y = 12 / stage_data[i][j];
                 if(j==0){
                    cell = row.insertCell(-1);
-                   cell.innerHTML="<b>"+stage_data[i][j]+" month intervals:</b> <br>";
+                   cell.innerHTML="<span class="+`interval_${i}`+"><b>"+stage_data[i][j]+" month intervals:</b> <br></span>";
           
                 }
                 else if (j>=1){
-                   cell.innerHTML+="<b>"+stage_data[i][j]+" month intervals:</b> <br>";
-                   var reset_date = document.querySelector(`#input_${i-1}_1`).innerHTML;
-                   dt_working = new Date(reset_date);
+                   cell.innerHTML+="<span class="+`interval_${i}`+"><b>"+stage_data[i][j]+" month intervals:</b><br></span> ";
+                   if(i==1 || i==7 || i==13)
+                   {
+                        dt_working=new Date(date);
+                   }
+                   else
+                   {
+                      var reset_date = document.querySelector(`#input_${i-1}_1`).innerHTML;
+                      dt_working = new Date(reset_date);
+                   }
+                   
                 }
                    
                    for (m = 0; m < y; m++) {
               
                      dt_working.setMonth(dt_working.getMonth() + stage_data[i][j]);
                      LOG("dt_working_multi_element ",m," ",dt_working)
-                     cell.innerHTML+="<span id="+`input_${i}_${count}`+">"+dt_working.toLocaleDateString('en-US') + "</span><br>";
-                     //$(parsedTable).append(tableBody);
+                     cell.innerHTML+="<span class="+`interval_${i}`+" id="+`input_${i}_${count}`+">"+dt_working.toLocaleDateString('en-US') + "</span><br>";
+                     $(parsedTable).append(tableBody);
                      resultBody.append(parsedTable);
                      count++;
                    }
@@ -276,7 +279,7 @@ function generate(stage_data, date) {
         
     }
 
-  (parsedTable).append(tableBody);
+  $(parsedTable).append(tableBody);
   resultBody.append(parsedTable);
   
 }
