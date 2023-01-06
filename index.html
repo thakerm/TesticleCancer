@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
   <title>Testicular Cancer Post Treatment Follow Up Tool</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -45,59 +45,60 @@
           <select id="stage" class="form-select" aria-label="Select"></select>
         </div>
         <div class="input-group mb-3">
-          <div class="col-2">
-            <button id="submit" class="btn btn-primary" onclick="filter('#path','#stage','#date')">Submit</button>
-    
 
-          </div>
+          <button id="submit" class="btn btn-primary" onclick="filter('#path','#stage','#date')">Submit</button>
 
+
+
+        </div>
+
+
+        <div class="row">
+          
+          <div class="col-auto"> <h2 id="stage_header"></h2></div>
+         
           <div class="col">
-            <button id="copy_btn" class= "btn btn-success" style="display:none;">Copy Table</button>
-    
-
+            <button id="copy_btn" class="btn" style="display:none;"><i class="bi bi-clipboard-fill">Copy Table</i></button>
           </div>
 
-          
         </div>
-     
-
-        <h2 id="stage_header"></h2>
-
-          <div class="row">
-
-          <div id="results" class="col"></div>    
-            
-          
-          </div>
-
-          <div id="image" class="row"></div>
-
-            <div class="row">
 
 
-             
-             
-                <a href="https://www.nccn.org/professionals/physician_gls/pdf/testicular.pdf">Reference: NCCN 2.2022</a>
-            
-            </div>
+        <div class="row">
 
-          
+          <div id="results" class="col"></div>
 
 
         </div>
-        <div class="col"></div>
 
-   
+        <div id="image" class="row"></div>
+
+        <div class="row">
+
+
+
+
+          <a href="https://www.nccn.org/professionals/physician_gls/pdf/testicular.pdf">Reference: NCCN 2.2022</a>
+
+        </div>
+
+
+
+
       </div>
-
-
+      <div class="col"></div>
 
 
     </div>
 
-    <link rel="stylesheet" href="static/CSS/style.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="static/JS/script.js"></script>
+
+
+
+  </div>
+
+  <link rel="stylesheet" href="static/CSS/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="static/JS/script.js"></script>
 </body>
 
 </html>
