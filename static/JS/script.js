@@ -12,7 +12,30 @@ $(function () {
   var path = document.querySelector("#path");
   updateForm(path);
 
+
+
 });
+
+ function toggle1(me)
+{
+
+    span_class = me.className;
+    var text = $('a.'+span_class).text();
+    $('br.'+span_class).toggle();
+    $('span.'+span_class).toggle();
+    if (text=="Show")
+    {
+     $('a.'+span_class).text('Hide');
+      //$('span.'+span_class).accordian()
+    }
+    else if(text=="Hide")
+    {
+      $('a.'+span_class).text('Show')
+      
+    }
+    
+   
+} 
 
 //converts selected date into format we can edit
 function process_date(date) {
@@ -199,7 +222,8 @@ function generate(stage_data, date) {
   const dt=new Date(date);
   var dt_working = new Date(date);
   resultBody = $("#results");
-  count = 0;
+  var count = 0;
+  var c = 0;
   var cell;
 
     for (i = 0;i < stage_data.length;i++)
@@ -209,16 +233,18 @@ function generate(stage_data, date) {
             var dt_working = new Date(date);
             row = tableBody.insertRow(-1);
             cell=row.insertCell(-1);
-            cell.id = `input_${i}`;
+            cell.id = `input${i}`;
             
             cell.innerHTML="<b>"+stage_data[i]+"</b>";
+            c++;
             continue;
         }
         
         if(stage_data[i]==1){
                 cell=row.insertCell(-1);
-                cell.id=`input_${i}`;
+                cell.id=`input${i}`;
                 cell.innerHTML="As Clinically Indicated";
+                c++;
                 continue;
         }
         else if(x>1){ //trying to generate multiple dates
@@ -228,11 +254,12 @@ function generate(stage_data, date) {
                 y = 12 / stage_data[i][j];
                 if(j==0){
                    cell = row.insertCell(-1);
-                   cell.innerHTML="<span class="+`interval_${i}`+"><b>"+stage_data[i][j]+" month intervals:</b> <br></span>";
+                   cell.innerHTML="<span class="+`date${c}`+"><b>"+stage_data[i][j]+" month intervals</b></span><a href='#' onclick='toggle1(this)' class= " +`date${c}`+" id="+`interval_${i+j}`+">Hide</a><br>";
           
                 }
-                else if (j>=1){
-                   cell.innerHTML+="<span class="+`interval_${i}`+"><b>"+stage_data[i][j]+" month intervals:</b><br></span> ";
+                else if (j>=1){ 
+                   cell.innerHTML+="<span class="+`date${c}`+"><b>"+stage_data[i][j]+" month intervals</b></span><a href='#' onclick='toggle1(this)' class= " +`date${c}`+" id="+`interval_${i+j}`+">Hide</a><br>";
+                   //cell.innerHTML+="<label class="+`interval_${i+j}`+"><b>"+stage_data[i][j]+" month intervals:</b></span><br>";
                    if(i==1 || i==7 || i==13)
                    {
                         dt_working=new Date(date);
@@ -249,11 +276,13 @@ function generate(stage_data, date) {
               
                      dt_working.setMonth(dt_working.getMonth() + stage_data[i][j]);
                      LOG("dt_working_multi_element ",m," ",dt_working)
-                     cell.innerHTML+="<span class="+`interval_${i}`+" id="+`input_${i}_${count}`+">"+dt_working.toLocaleDateString('en-US') + "</span><br>";
+                     cell.innerHTML+="<span class="+`date${c}`+" id="+`input_${i}_${count}`+">"+dt_working.toLocaleDateString('en-US') + "</span><br class="+`date${c}`+">";
                      $(parsedTable).append(tableBody);
                      resultBody.append(parsedTable);
                      count++;
+        
                    }
+                   c++;
     
             }
             count=0;       
@@ -269,17 +298,34 @@ function generate(stage_data, date) {
                 LOG("dt_working_single_element ",dt_working)
                 cell.innerHTML+="<span id="+`input_${i}_${count}`+">"+dt_working.toLocaleDateString('en-US') + "</span><br>";
                 count++;
+                c++;
            
             }
             
             count=0;
         }
         
-   
-        
+     
     }
 
   $(parsedTable).append(tableBody);
   resultBody.append(parsedTable);
-  
+  document.querySelector('#copy_btn').setAttribute("style","display:block");
 }
+
+var copyBtn = document.querySelector('#copy_btn');
+copyBtn.addEventListener('click', function () {
+
+  
+  var urlField = document.querySelector('table');
+   
+  // create a Range object
+  var range = document.createRange();  
+  // set the Node to select the "range"
+  range.selectNode(urlField);
+  // add the Range to the set of window selections
+  window.getSelection().addRange(range);
+   
+  // execute 'copy', can't 'cut' in this case
+  document.execCommand('copy');
+}, false);
