@@ -12,7 +12,22 @@ $(function () {
   var path = document.querySelector("#path");
   updateForm(path);
 
+var copyBtn = document.querySelector('#copy_btn');
+copyBtn.addEventListener('click', function () {
 
+  
+  var urlField = document.querySelector('table');
+   
+  // create a Range object
+  var range = document.createRange();  
+  // set the Node to select the "range"
+  range.selectNode(urlField);
+  // add the Range to the set of window selections
+  window.getSelection().addRange(range);
+   
+  // execute 'copy', can't 'cut' in this case
+  document.execCommand('copy');
+});
 
 });
 
@@ -23,16 +38,25 @@ $(function () {
     var text = $('a.'+span_class).text();
     $('br.'+span_class).toggle();
     $('span.'+span_class).toggle();
-    if (text=="Show")
+    //LOG($('a.'+span_class+' i').hasClass('bi bi-arrow-up-short'));
+   /*  if($('a.'+span_class+' i').hasClass('bi bi-eye'))
+    { 
+      $('a.'+span_class+' i').attr('class','bi bi-eye-slash');
+    }
+    else if($('a.'+span_class+' i').hasClass('bi bi-eye-slash'))
     {
-     $('a.'+span_class).text('Hide');
+      $('a.'+span_class+' i').attr('class','bi bi-eye');
+    } */
+  if (text=="Show")
+    {
+      $('a.'+span_class).text('Hide');
       //$('span.'+span_class).accordian()
     }
     else if(text=="Hide")
     {
       $('a.'+span_class).text('Show')
       
-    }
+    } 
     
    
 } 
@@ -81,8 +105,8 @@ function updateForm(path) {
 
     const select = document.querySelector("#stage");
     const arr = [
-      "Clinical Stage I without Risk Factors, NSGCT: Active Surveillance",
-      "Clinical Stage I with Risk Factors,a NSGCT: Active Surveillance",
+      "Clinical Stage I without Risk Factors NSGCT: Active Surveillance",
+      "Clinical Stage I with Risk Factors NSGCT: Active Surveillance",
       "Clinical Stage IA/B NSGCT: Treated with 1 Cycle of Adjuvant BEP Chemotherapy or Primary RPLND",
       "Clincal Stage II/III NSGCT: Surveillance After Complete Response to Chemotherapy ± Post Chemotherapy RPLND",
       "Pathologic Stage IIA/B NSGCT: Post-Primary RPLND and Treated with Adjuvant Chemotherapy",
@@ -121,27 +145,27 @@ function filter(path, stage, date) {
         //$("#image").append(img);
         generate(GCT_1_0=[
             "H&P/Labs",3,6,[6,12],12,12,
-            "CT",
+            "CT AP",
             6,6,[6,12],[12,24],[12,24],
             "CXR",1,1,1,1,1],date_value);
     }
     else if(stage_value==1)
         generate(GCT_1_1 = [
             "H&P/Labs",6,6,12,12,12,
-            "CT",12,12,12,1,1,
+            "CT AP",12,12,12,1,1,
             "CXR",1,1,1,1,1],date_value);
     
     else if (stage_value==2)
     {
         generate(GCT_1_2 = [
             "H&P/Labs",3,6,6,6,6,
-            "CT",3,12,12,1,1,
+            "CT AP",3,12,12,1,1,
             "CXR",6,6,1,1,1] ,date_value);
     }
     else{
         generate(GCT_1_3 = [
             "H&P/Labs",2,3,6,6,12,
-            "CT",4,6,12,12,1,
+            "CT AP",4,6,12,12,1,
             "CXR",2,3,12,12,12] ,date_value);
     }
    
@@ -152,39 +176,39 @@ function filter(path, stage, date) {
     {
         generate(NSGCT_1_0=[
             "H&P/Labs",2,3,[4,6],6,12,
-            "CT",
+            "CT AP",
             [4,6],6,12,1,1,
             "CXR",[4,12],12,12,12,1],date_value);
     }
     else if(stage_value==1)
         generate(NSGCT_1_1 = [
             "H&P/Labs",2,3,[4,6],6,12,
-            "CT",4,[4,6],6,12,1,
+            "CT AP",4,[4,6],6,12,1,
             "CXR",4,[4,6],6,12,1],date_value);
     
     else if (stage_value==2)
     {
         generate(NSGCT_1_2 = [
             "H&P/Labs",3,3,6,6,12,
-            "CT",12,12,1,1,1,
+            "CT AP",12,12,1,1,1,
             "CXR",[6,12],12,1,1,1] ,date_value);
     }
     else if(stage_value==3){
         generate(NSGCT_1_3 = [
             "H&P/Labs",2,3,6,6,6,
-            "CT",6,[6,12],12,1,1,
+            "CT AP",6,[6,12],12,1,1,
             "CXR",6,6,12,12,1] ,date_value);
     }
     else if(stage_value==4){
         generate(NSGCT_1_4 = [
             "H&P/Labs",6,6,12,12,12,
-            "CT",4,12,1,1,1,
-            "CXR",6,12,12,12,12] ,date_value);
+            "CT AP",4,12,1,1,1,
+            "CXR AP",6,12,12,12,12] ,date_value);
     }
     else {
         generate(NSGCT_1_5 = [
             "H&P/Labs",2,3,4,6,12,
-            "CT",4,12,1,1,1,
+            "CT AP",4,12,1,1,1,
             "CXR",[2,4],[3,6],12,12,12] ,date_value);
     }
   }
@@ -254,11 +278,11 @@ function generate(stage_data, date) {
                 y = 12 / stage_data[i][j];
                 if(j==0){
                    cell = row.insertCell(-1);
-                   cell.innerHTML="<span class="+`date${c}`+"><b>"+stage_data[i][j]+" month intervals</b></span><a href='#' onclick='toggle1(this)' class= " +`date${c}`+" id="+`interval_${i+j}`+">Hide</a><br>";
+                   cell.innerHTML="<span class="+`date${c}`+"><b>"+stage_data[i][j]+" month intervals </b></span><a href='#' onclick='toggle1(this)' class= " +`date${c}`+" id="+`interval_${i+j}`+">Hide</a><br>";
           
                 }
                 else if (j>=1){ 
-                   cell.innerHTML+="<span class="+`date${c}`+"><b>"+stage_data[i][j]+" month intervals</b></span><a href='#' onclick='toggle1(this)' class= " +`date${c}`+" id="+`interval_${i+j}`+">Hide</a><br>";
+                   cell.innerHTML+="<span class="+`date${c}`+"><b>"+stage_data[i][j]+" month intervals </b></span><a href='#' onclick='toggle1(this)' class= " +`date${c}`+" id="+`interval_${i+j}`+">Hide</a><br>";
                    //cell.innerHTML+="<label class="+`interval_${i+j}`+"><b>"+stage_data[i][j]+" month intervals:</b></span><br>";
                    if(i==1 || i==7 || i==13)
                    {
@@ -313,19 +337,3 @@ function generate(stage_data, date) {
   document.querySelector('#copy_btn').setAttribute("style","display:block");
 }
 
-var copyBtn = document.querySelector('#copy_btn');
-copyBtn.addEventListener('click', function () {
-
-  
-  var urlField = document.querySelector('table');
-   
-  // create a Range object
-  var range = document.createRange();  
-  // set the Node to select the "range"
-  range.selectNode(urlField);
-  // add the Range to the set of window selections
-  window.getSelection().addRange(range);
-   
-  // execute 'copy', can't 'cut' in this case
-  document.execCommand('copy');
-}, false);
